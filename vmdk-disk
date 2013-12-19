@@ -41,7 +41,7 @@ disk()
         exit 1
     fi
 
-    if [ ! -f /usr/bin/qemu-img ] ; then
+    if [ ! -f /usr/local/bin/qemu-img -a ! -f /usr/bin/qemu-img ] ; then
         if [ -f /usr/bin/apt-get ] ; then
             sudo apt-get install -y qemu-kvm
         else
@@ -49,8 +49,8 @@ disk()
         fi
     fi
 
-    if [ ! -f /usr/bin/qemu-img ] ; then
-        zenity --error --title="$TITLE" --text="/usr/bin/qemu-img not found"
+    if [ ! -f /usr/local/bin/qemu-img -a ! -f /usr/bin/qemu-img ] ; then
+        zenity --error --title="$TITLE" --text="qemu-img not found"
         exit 1
     fi
 
