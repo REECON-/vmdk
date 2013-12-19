@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+TITLE=$(basename $0)
+
 disk()
 {
     if [ "$1" = "" ] ; then
@@ -23,14 +25,19 @@ disk()
         TARGET=$1
     fi
 
+    if [ ! "$(whoami)" = "root" ] ; then
+        zenity --error --title="$TITLE" --text="Run $0 as root"
+        exit 1
+    fi
+
     if [ ! "$(df | grep $TARGET)" = "" ] ; then
-        echo "$TARGET is mounted"
+        zenity --error --title="$TITLE" --text="$TARGET is mounted"
         exit 1
     fi
 
     name=$(ls *.zip | sed -e 's#.zip$##')
     if [ ! -f $name.zip ] ; then
-        echo "$name.zip not found"
+        zenity --error --title="$TITLE" --text="$name.zip not found"
         exit 1
     fi
 
@@ -43,20 +50,20 @@ disk()
     fi
 
     if [ ! -f /usr/bin/qemu-img ] ; then
-        echo "/usr/bin/qemu-img not found"
+        zenity --error --title="$TITLE" --text="/usr/bin/qemu-img not found"
         exit 1
     fi
 
     unzip $name.zip $name.vmdk
     if [ ! -f $name.vmdk ] ; then
-        echo "$name.vmdk not found"
+        zenity --error --title="$TITLE" --text="$name.vmdk not found"
         exit 1
     fi
 
-    echo "Image $name.vmdk to $TARGET"
+    zenity --error --title="$TITLE" --text="Image $name.vmdk to $TARGET"
     qemu-img convert $name.vmdk -O raw $TARGET
 
-    echo "Remove $name.vmdk"
+    zenity --error --title="$TITLE" --text="Remove $name.vmdk"
     rm -f $name.vmdk
 }
 
