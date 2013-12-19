@@ -61,7 +61,7 @@ disk()
     fi
 
     zenity --error --title="$TITLE" --text="Image $name.vmdk to $TARGET"
-    qemu-img convert $name.vmdk -O raw $TARGET
+    /usr/bin/qemu-img convert $name.vmdk -O raw $TARGET
 
     zenity --error --title="$TITLE" --text="Remove $name.vmdk"
     rm -f $name.vmdk
