@@ -19,7 +19,7 @@ SCRIPT=vmdk-disk
 
 zenity --question --title="$SCRIPT" --text="Continue with $SCRIPT?"
 if [ $? -eq 0 ] ; then
-    sudo ./g $*
+    sudo ./$SCRIPT $*
     zenity --question --title="$SCRIPT" --text="Reboot?"
     if [ $? -eq 0 ] ; then
         sudo reboot

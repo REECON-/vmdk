@@ -59,11 +59,7 @@ disk()
         zenity --error --title="$TITLE" --text="$name.vmdk not found"
         exit 1
     fi
-
-    zenity --error --title="$TITLE" --text="Image $name.vmdk to $TARGET"
     /usr/bin/qemu-img convert $name.vmdk -O raw $TARGET
-
-    zenity --error --title="$TITLE" --text="Remove $name.vmdk"
     rm -f $name.vmdk
 }
 
