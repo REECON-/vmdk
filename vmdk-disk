@@ -35,9 +35,9 @@ disk()
         exit 1
     fi
 
-    name=$(ls *.zip | sed -e 's#.zip$##')
-    if [ ! -f $name.zip ] ; then
-        zenity --error --title="$TITLE" --text="$name.zip not found"
+    vmdk=$(ls *.vmdk 2> /dev/null)
+    if [ "$vmdk" = "" ] ; then
+        zenity --error --title="$TITLE" --text="vmdk not found"
         exit 1
     fi
 
@@ -54,13 +54,7 @@ disk()
         exit 1
     fi
 
-    unzip $name.zip $name.vmdk
-    if [ ! -f $name.vmdk ] ; then
-        zenity --error --title="$TITLE" --text="$name.vmdk not found"
-        exit 1
-    fi
-    /usr/bin/qemu-img convert $name.vmdk -O raw $TARGET
-    rm -f $name.vmdk
+    /usr/bin/qemu-img convert $vmdk -O raw $TARGET
 }
 
 case "$1" in
