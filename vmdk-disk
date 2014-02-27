@@ -17,12 +17,13 @@
 
 TITLE=$(basename $0)
 
-disk()
+tasks()
 {
     if [ "$1" = "" ] ; then
-        TARGET=/dev/sda
+        DISK=/dev/sda
     else
-        TARGET=$1
+        DISK=$1
+        NAME=$2
     fi
 
     if [ ! "$(whoami)" = "root" ] ; then
@@ -30,14 +31,8 @@ disk()
         exit 1
     fi
 
-    if [ ! "$(df | grep $TARGET)" = "" ] ; then
-        zenity --error --title="$TITLE" --text="$TARGET is mounted"
-        exit 1
-    fi
-
-    name=$(ls *.vmdk | sed -e 's#.vmdk$##')
-    if [ ! -f $name.vmdk ] ; then
-        zenity --error --title="$TITLE" --text="$name.vmdk not found"
+    if [ ! "$(df | grep $DISK)" = "" ] ; then
+        zenity --error --title="$TITLE" --text="$DISK is mounted"
         exit 1
     fi
 
@@ -54,11 +49,21 @@ disk()
         exit 1
     fi
 
-    /usr/bin/qemu-img convert $name.vmdk -O raw $TARGET
+    if [ ! "$NAME" = "" ] ; then
+        name=$NAME
+        /usr/bin/qemu-img convert $DISK -O vmdk $name.vmdk
+    else
+        name=$(ls *.vmdk | sed -e 's#.vmdk$##')
+        if [ ! -f $name.vmdk ] ; then
+            zenity --error --title="$TITLE" --text="$name.vmdk not found"
+            exit 1
+        fi
+        /usr/bin/qemu-img convert $name.vmdk -O raw $DISK
+    fi
 }
 
 case "$1" in
--t ) disk $2 ;;
+-t ) shift; tasks $* ;;
 * ) sudo $0 -t $* ;;
 esac
 
