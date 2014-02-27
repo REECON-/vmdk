@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2013 Dean Okamura
+# Copyright 2014 Dean Okamura
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +17,19 @@
 
 SCRIPT=vmdk-disk
 
-zenity --question --title="$SCRIPT" --text="Continue with $SCRIPT?"
+if [ "$1" = "" ] ; then
+    DISK=/dev/sda
+else
+    DISK=$1
+fi
+if [ "$2" = "" ] ; then
+    NAME=$(pwd)
+    NAME=$(basename $NAME).vmdk
+else
+    NAME=$2
+fi
+COMMAND="./$SCRIPT $DISK $NAME"
+zenity --question --title="$SCRIPT" --text="Continue with $COMMAND?"
 if [ $? -eq 0 ] ; then
-    sudo ./$SCRIPT $*
-    zenity --question --title="$SCRIPT" --text="Reboot?"
-    if [ $? -eq 0 ] ; then
-        sudo reboot
-    fi
+    sudo ./$SCRIPT $DISK $NAME
 fi
