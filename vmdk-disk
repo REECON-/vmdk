@@ -15,25 +15,30 @@
 # limitations under the License.
 #
 
-TITLE=$(basename $0)
+title=$(basename $0)
 
 tasks()
 {
-    if [ "$1" = "" ] ; then
-        DISK=/dev/sda
+    option=$1
+    if [ "$2" = "" ] ; then
+        disk=/dev/sda
     else
-        DISK=$1
-        NAME=$2
+        disk=$2
+        gb=$3
     fi
+    name=$(pwd)
+    name=$(basename $name)
 
     if [ ! "$(whoami)" = "root" ] ; then
-        zenity --error --title="$TITLE" --text="Run $0 as root"
+        zenity --error --title="$title" --text="Run $0 as root"
         exit 1
     fi
 
-    if [ ! "$(df | grep $DISK)" = "" ] ; then
-        zenity --error --title="$TITLE" --text="$DISK is mounted"
-        exit 1
+    if [ "$option" = "restore" ] ; then
+        if [ ! "$(df | grep $disk)" = "" ] ; then
+            zenity --error --title="$title" --text="$disk is mounted"
+            exit 1
+        fi
     fi
 
     if [ ! -f /usr/local/bin/qemu-img -a ! -f /usr/bin/qemu-img ] ; then
@@ -45,20 +50,25 @@ tasks()
     fi
 
     if [ ! -f /usr/local/bin/qemu-img -a ! -f /usr/bin/qemu-img ] ; then
-        zenity --error --title="$TITLE" --text="qemu-img not found"
+        zenity --error --title="$title" --text="qemu-img not found"
         exit 1
     fi
 
-    if [ ! "$NAME" = "" ] ; then
-        name=$NAME
-        /usr/bin/qemu-img convert $DISK -O vmdk $name.vmdk
+    if [ "$option" = "backup" ] ; then
+        if [ ! "$gb" = "" ] ; then
+            image=$name.img
+            dd bs=1024 count=${gb}000000 if=$disk of=$image
+            /usr/bin/qemu-img convert $image -O vmdk $name.vmdk
+            rm $image
+        else
+            /usr/bin/qemu-img convert $disk -O vmdk $name.vmdk
+        fi
     else
-        name=$(ls *.vmdk | sed -e 's#.vmdk$##')
         if [ ! -f $name.vmdk ] ; then
-            zenity --error --title="$TITLE" --text="$name.vmdk not found"
+            zenity --error --title="$title" --text="$name.vmdk not found"
             exit 1
         fi
-        /usr/bin/qemu-img convert $name.vmdk -O raw $DISK
+        /usr/bin/qemu-img convert $name.vmdk -O raw $disk
     fi
 }
 

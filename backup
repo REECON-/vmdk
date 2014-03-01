@@ -17,19 +17,8 @@
 
 SCRIPT=vmdk-disk
 
-if [ "$1" = "" ] ; then
-    DISK=/dev/sda
-else
-    DISK=$1
-fi
-if [ "$2" = "" ] ; then
-    NAME=$(pwd)
-    NAME=$(basename $NAME).vmdk
-else
-    NAME=$2
-fi
-COMMAND="./$SCRIPT $DISK $NAME"
-zenity --question --title="$SCRIPT" --text="Continue with $COMMAND?"
+command="./$SCRIPT backup $*"
+zenity --question --title="$SCRIPT" --text="Continue with $command?"
 if [ $? -eq 0 ] ; then
-    sudo ./$SCRIPT $DISK $NAME
+    sudo $command
 fi

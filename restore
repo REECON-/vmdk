@@ -17,9 +17,10 @@
 
 SCRIPT=vmdk-disk
 
-zenity --question --title="$SCRIPT" --text="Continue with $SCRIPT?"
+command="./$SCRIPT restore $*"
+zenity --question --title="$SCRIPT" --text="Continue with $command?"
 if [ $? -eq 0 ] ; then
-    sudo ./$SCRIPT $*
+    sudo $command
     zenity --question --title="$SCRIPT" --text="Reboot?"
     if [ $? -eq 0 ] ; then
         sudo reboot
