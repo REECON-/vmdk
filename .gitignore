@@ -3,7 +3,6 @@
 .bundle
 .config
 coverage
-disks
 lost+found
 InstalledFiles
 lib/bundler/man
@@ -18,3 +17,6 @@ tmp
 .yardoc
 _yardoc
 doc/
+saudade/
+vidro/
+yume/
