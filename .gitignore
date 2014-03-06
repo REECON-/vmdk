@@ -16,7 +16,5 @@ tmp
 # YARD artifacts
 .yardoc
 _yardoc
-doc/
-saudade/
-vidro/
-yume/
+# Ignore disks in subdirectories
+*/*
