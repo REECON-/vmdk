@@ -43,7 +43,7 @@ tasks()
 
     if [ ! -f /usr/local/bin/qemu-img -a ! -f /usr/bin/qemu-img ] ; then
         if [ -f /usr/bin/apt-get ] ; then
-            sudo apt-get install -y qemu-kvm
+            sudo apt-get install -y qemu-common qemu-utils
         else
             sudo yum install -y qemu-kvm
         fi
