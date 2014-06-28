@@ -16,12 +16,15 @@
 #
 
 name=$(basename $(pwd))
-part=sda1
+part=sdb
 
 tasks()
 {
-    dd if=/dev/$part | bzip2 > $name.$part.bz2
-    chmod 644 $name.$part.bz2
+    if [ ! "$(df | grep /dev/$part)" = "" ] ; then
+        echo "/dev/$part is mounted"
+        exit 1
+    fi
+    bzip2 -dc $name.$part.bz2 | dd of=/dev/$part bs=100M
 }
 
 case "$1" in

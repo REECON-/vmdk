@@ -16,11 +16,11 @@
 #
 
 name=$(basename $(pwd))
-part=sdb1
+part=sdb
 
 tasks()
 {
-    dd if=/dev/$part | bzip2 > $name.$part.bz2
+    dd if=/dev/$part bs=100M | bzip2 > $name.$part.bz2
     chmod 644 $name.$part.bz2
 }
 
