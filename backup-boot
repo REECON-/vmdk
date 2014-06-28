@@ -21,6 +21,7 @@ dev=sda
 tasks()
 {
     dd if=/dev/$dev bs=2048 count=1 | bzip2 > $name.boot.bz2
+    chmod 644 $name.boot.bz2
 }
 
 case "$1" in

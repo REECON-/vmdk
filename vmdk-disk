@@ -59,9 +59,11 @@ tasks()
             image=$name.img
             dd bs=1024 count=${gb}000000 if=$disk of=$image
             /usr/bin/qemu-img convert $image -O vmdk $name.vmdk
+            chmod 644 $name.vmdk
             rm $image
         else
             /usr/bin/qemu-img convert $disk -O vmdk $name.vmdk
+            chmod 644 $name.vmdk
         fi
     else
         if [ ! -f $name.vmdk ] ; then

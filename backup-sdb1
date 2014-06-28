@@ -21,6 +21,7 @@ part=sdb1
 tasks()
 {
     dd if=/dev/$part | bzip2 > $name.$part.bz2
+    chmod 644 $name.$part.bz2
 }
 
 case "$1" in
