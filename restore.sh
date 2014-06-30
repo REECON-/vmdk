@@ -15,10 +15,14 @@
 # limitations under the License.
 #
 
-SCRIPT=vmdk-disk
+SCRIPT=vmdk-disk.sh
 
-command="./$SCRIPT backup $*"
+command="./$SCRIPT restore $*"
 zenity --question --title="$SCRIPT" --text="Continue with $command?"
 if [ $? -eq 0 ] ; then
     sudo $command
+    zenity --question --title="$SCRIPT" --text="Reboot?"
+    if [ $? -eq 0 ] ; then
+        sudo reboot
+    fi
 fi
