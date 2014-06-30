@@ -15,9 +15,10 @@
 # limitations under the License.
 #
 
-SCRIPT=vmdk-disk.sh
+SCRIPT=$(pwd)/vmdk-disk.sh
+. ./init.shl
 
-command="./$SCRIPT restore $*"
+command="$SCRIPT restore $*"
 zenity --question --title="$SCRIPT" --text="Continue with $command?"
 if [ $? -eq 0 ] ; then
     sudo $command

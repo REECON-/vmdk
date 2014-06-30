@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # Copyright 2014 Dean Okamura
 #
@@ -15,16 +14,16 @@
 # limitations under the License.
 #
 
-. ./init.shl
-part=sdb
-
-tasks()
-{
-    dd if=/dev/$part bs=100M | bzip2 > $name.$part.bz2
-    chmod 644 $name.$part.bz2
-}
-
-case "$1" in
--t ) shift; tasks $* ;;
-* ) sudo $0 -t $* ;;
-esac
+name=$1
+if [ "$name" = "" ] ; then
+    name=$(basename $(pwd))
+else
+    if [ ! -d $name ] ; then
+        mkdir $name
+    fi
+    cd $name
+fi
+if [ "$(basename $(pwd))" = "vmdk" ] ; then
+    echo "ERROR: $(pwd) is not a supported directory"
+    exit 1
+fi

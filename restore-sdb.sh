@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-name=$(basename $(pwd))
+. ./init.shl
 part=sdb
 
 tasks()
