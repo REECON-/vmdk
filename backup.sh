@@ -15,10 +15,11 @@
 # limitations under the License.
 #
 
-SCRIPT=$(pwd)/vmdk-disk.sh
-. ./init.shl
+BIN_DIR=$(dirname $0)
+SCRIPT=$BIN_DIR/vmdk-disk.sh
+. $BIN_DIR/init.shl
 
-command="$SCRIPT backup $*"
+command="$SCRIPT backup"
 zenity --question --title="$SCRIPT" --text="Continue with $command?"
 if [ $? -eq 0 ] ; then
     sudo $command

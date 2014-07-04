@@ -20,14 +20,12 @@ title=$(basename $0)
 tasks()
 {
     option=$1
-    if [ "$2" = "" ] ; then
-        disk=/dev/sda
-    else
-        disk=$2
-        gb=$3
+    disk=/dev/sda
+    gb=
+    if [ -f vmdk-disk.env ] ; then
+       . ./vmdk-disk.env
     fi
-    name=$(pwd)
-    name=$(basename $name)
+    name=$(basename $(pwd))
 
     if [ ! "$(whoami)" = "root" ] ; then
         zenity --error --title="$title" --text="Run $0 as root"
@@ -57,7 +55,7 @@ tasks()
     if [ "$option" = "backup" ] ; then
         if [ ! "$gb" = "" ] ; then
             image=$name.img
-            dd bs=1024 count=${gb}000000 if=$disk of=$image
+            dd bs=1024 count=${gb}G if=$disk of=$image
             /usr/bin/qemu-img convert $image -O vmdk $name.vmdk
             chmod 644 $name.vmdk
             rm $image
